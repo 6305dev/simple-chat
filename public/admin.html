@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -121,6 +124,35 @@
             font-size: 0.9rem;
         }
 
+        .search-input-wrapper {
+            background-color: #f0f2f5;
+            border-radius: 8px;
+            padding: 7px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .search-input-wrapper svg {
+            flex-shrink: 0;
+            color: var(--wa-text-secondary);
+        }
+
+        #search-user-input {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 0.875rem;
+            font-family: inherit;
+            color: var(--wa-text-primary);
+            width: 100%;
+        }
+
+        #search-user-input::placeholder {
+            color: var(--wa-text-secondary);
+        }
+
         #user-list {
             list-style: none;
             overflow-y: auto;
@@ -130,6 +162,7 @@
         #user-list::-webkit-scrollbar {
             width: 6px;
         }
+
         #user-list::-webkit-scrollbar-thumb {
             background-color: #cccccc;
         }
@@ -259,6 +292,7 @@
         #chat-messages::-webkit-scrollbar {
             width: 6px;
         }
+
         #chat-messages::-webkit-scrollbar-thumb {
             background-color: rgba(11, 20, 26, 0.2);
         }
@@ -288,8 +322,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .message-user {
@@ -339,7 +380,8 @@
             font-family: inherit;
         }
 
-        #upload-button, #send-button {
+        #upload-button,
+        #send-button {
             background: none;
             border: none;
             color: #54656f;
@@ -353,7 +395,8 @@
             transition: background 0.2s;
         }
 
-        #upload-button:hover, #send-button:hover {
+        #upload-button:hover,
+        #send-button:hover {
             background-color: rgba(11, 20, 26, 0.08);
         }
 
@@ -373,15 +416,20 @@
             flex-direction: column;
             gap: 16px;
         }
-        #img-lightbox.open { display: flex; }
+
+        #img-lightbox.open {
+            display: flex;
+        }
+
         #img-lightbox img {
             max-width: 90vw;
             max-height: 80vh;
             border-radius: 8px;
             object-fit: contain;
         }
+
         #img-lightbox button {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border: none;
             color: #fff;
             padding: 8px 20px;
@@ -399,7 +447,11 @@
             align-items: center;
             justify-content: center;
         }
-        #upload-preview-overlay.open { display: flex; }
+
+        #upload-preview-overlay.open {
+            display: flex;
+        }
+
         #upload-preview-box {
             background: #fff;
             border-radius: 12px;
@@ -410,13 +462,20 @@
             gap: 14px;
             width: 320px;
         }
+
         #upload-preview-box img {
             width: 100%;
             max-height: 240px;
             border-radius: 8px;
             object-fit: contain;
         }
-        .preview-actions { display: flex; gap: 10px; width: 100%; }
+
+        .preview-actions {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
         .preview-actions button {
             flex: 1;
             padding: 10px;
@@ -425,24 +484,31 @@
             cursor: pointer;
             font-weight: 500;
         }
-        #btn-preview-send { background: var(--wa-green); color: #fff; }
-        #btn-preview-cancel { background: #e9edef; color: var(--wa-text-primary); }
+
+        #btn-preview-send {
+            background: var(--wa-green);
+            color: #fff;
+        }
+
+        #btn-preview-cancel {
+            background: #e9edef;
+            color: var(--wa-text-primary);
+        }
     </style>
 </head>
+
 <body>
 
     <div class="app-container">
         <!-- Sidebar Kiri -->
         <div id="user-list-container">
-            <div class="sidebar-header">
-                <div class="admin-profile">
-                    <div class="avatar-circle">A</div>
-                    <h3>Admin Support</h3>
-                </div>
-            </div>
             <div class="sidebar-search">
-                <div class="search-box">
-                    <span>💬 Percakapan Pelanggan</span>
+                <div class="search-input-wrapper">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                    <input type="text" id="search-user-input" placeholder="Cari nama atau ID..." autocomplete="off">
                 </div>
             </div>
             <ul id="user-list">
@@ -456,7 +522,7 @@
                 <div class="chat-header-avatar" id="header-avatar" style="display:none;">U</div>
                 <div class="chat-header-text">
                     <h4 id="header-title">Pilih percakapan untuk memulai</h4>
-                    <p id="header-subtitle" style="font-family: monospace"></p>
+                    <p id="header-subtitle"></p>
                 </div>
             </div>
 
@@ -470,13 +536,15 @@
                 <input type="file" id="admin-file-input" accept="image/*" style="display:none;">
                 <button id="upload-button" title="Kirim Gambar">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                        <path d="M1.998 21.5h19.999c1.104 0 2-.896 2-2V4.5c0-1.104-.896-2-2-2H1.998c-1.104 0-2 .896-2 2v15c0 1.104.896 2 2 2zm2-16h16v13h-16v-13zm11.5 8.5l-3.5 4.5-2.5-3-3.5 4.5h14l-4.5-6z"/>
+                        <path
+                            d="M1.998 21.5h19.999c1.104 0 2-.896 2-2V4.5c0-1.104-.896-2-2-2H1.998c-1.104 0-2 .896-2 2v15c0 1.104.896 2 2 2zm2-16h16v13h-16v-13zm11.5 8.5l-3.5 4.5-2.5-3-3.5 4.5h14l-4.5-6z" />
                     </svg>
                 </button>
                 <input type="text" id="chat-input" placeholder="Ketik balasan..." autocomplete="off">
                 <button id="send-button" title="Kirim Pesan">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                        <path d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"/>
+                        <path
+                            d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z" />
                     </svg>
                 </button>
             </div>
@@ -522,6 +590,11 @@
         // --- STATE ---
         let currentChatUserId = null;
 
+        // --- PENCARIAN USER ---
+        document.getElementById('search-user-input').addEventListener('input', function () {
+            filterUsers(this.value);
+        });
+
         // --- FUNGSI UTAMA ---
         function formatMsgTime(dateString) {
             if (!dateString) return new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
@@ -532,7 +605,7 @@
         function displayMessage(content, sender, imageUrl = null, dateString = null) {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message');
-            
+
             if (sender === 'me') {
                 messageElement.classList.add('message-me');
             } else {
@@ -574,42 +647,68 @@
             }
         }
 
+        // Simpan semua data percakapan untuk keperluan filter
+        let allConversations = [];
+
+        function renderUserList(conversations) {
+            userList.innerHTML = '';
+            if (conversations.length === 0) {
+                userList.innerHTML = '<li style="padding: 20px 16px; text-align: center; color: var(--wa-text-secondary); font-size: 0.85rem;">Tidak ada hasil ditemukan.</li>';
+                return;
+            }
+            conversations.forEach(conv => {
+                const userItem = document.createElement('li');
+                userItem.className = 'user-item';
+                userItem.dataset.userId = conv.user.id;
+                if (conv.user.id === currentChatUserId) {
+                    userItem.classList.add('active');
+                }
+
+                const initial = (conv.user.username || 'U').charAt(0).toUpperCase();
+
+                // Ambil pesan terakhir untuk mendapatkan tanggal & cuplikan teks
+                const lastMsg = conv.messages && conv.messages.length > 0 ? conv.messages[0] : null;
+                const formattedDate = lastMsg ? formatLastDate(lastMsg.createdAt) : '';
+                const lastSnippet = lastMsg ? (lastMsg.imageUrl ? '📷 Gambar' : lastMsg.content) : `User ID: ${conv.user.id}`;
+
+                userItem.innerHTML = `
+                    <div class="user-avatar">${initial}</div>
+                    <div class="user-info">
+                        <div class="user-top">
+                            <div class="user-name">${conv.user.username}</div>
+                            <div class="user-time">${formattedDate}</div>
+                        </div>
+                        <div class="user-subtext">${lastSnippet}</div>
+                    </div>
+                `;
+
+                userItem.onclick = () => selectUser(conv.user.id, conv.user.username);
+                userList.appendChild(userItem);
+            });
+        }
+
+        function filterUsers(query) {
+            const q = query.trim().toLowerCase();
+            if (!q) {
+                renderUserList(allConversations);
+                return;
+            }
+            const filtered = allConversations.filter(conv => {
+                const nameMatch = (conv.user.username || '').toLowerCase().includes(q);
+                const idMatch = String(conv.user.id).toLowerCase().includes(q);
+                return nameMatch || idMatch;
+            });
+            renderUserList(filtered);
+        }
+
         async function loadAllConversations() {
             try {
                 const response = await fetch(`${SERVER_URL}/api/messages/admin/${ADMIN_ID}`);
-                const conversations = await response.json();
-                
-                userList.innerHTML = '';
-                
-                conversations.forEach(conv => {
-                    const userItem = document.createElement('li');
-                    userItem.className = 'user-item';
-                    userItem.dataset.userId = conv.user.id;
-                    if (conv.user.id === currentChatUserId) {
-                        userItem.classList.add('active');
-                    }
+                allConversations = await response.json();
 
-                    const initial = (conv.user.username || 'U').charAt(0).toUpperCase();
-
-                    // Ambil pesan terakhir untuk mendapatkan tanggal & cuplikan teks
-                    const lastMsg = conv.messages && conv.messages.length > 0 ? conv.messages[0] : null;
-                    const formattedDate = lastMsg ? formatLastDate(lastMsg.createdAt) : '';
-                    const lastSnippet = lastMsg ? (lastMsg.imageUrl ? '📷 Gambar' : lastMsg.content) : `User ID: ${conv.user.id}`;
-
-                    userItem.innerHTML = `
-                        <div class="user-avatar">${initial}</div>
-                        <div class="user-info">
-                            <div class="user-top">
-                                <div class="user-name">${conv.user.username}</div>
-                                <div class="user-time">${formattedDate}</div>
-                            </div>
-                            <div class="user-subtext">${lastSnippet}</div>
-                        </div>
-                    `;
-
-                    userItem.onclick = () => selectUser(conv.user.id, conv.user.username);
-                    userList.appendChild(userItem);
-                });
+                // Terapkan filter yang sedang aktif (jika ada)
+                const currentQuery = document.getElementById('search-user-input')?.value || '';
+                filterUsers(currentQuery);
             } catch (error) {
                 console.error('Gagal memuat daftar percakapan:', error);
             }
@@ -626,7 +725,7 @@
             }
 
             currentChatUserId = userId;
-            
+
             // Update Header ala WhatsApp Web
             headerAvatar.style.display = 'flex';
             headerAvatar.textContent = (username || 'U').charAt(0).toUpperCase();
@@ -638,7 +737,7 @@
             try {
                 const response = await fetch(`${SERVER_URL}/api/messages/${ADMIN_ID}/${userId}`);
                 const messages = await response.json();
-                
+
                 messages.forEach(msg => {
                     const sender = (msg.sender.id === ADMIN_ID) ? 'me' : 'user';
                     displayMessage(msg.content, sender, msg.imageUrl, msg.createdAt);
@@ -750,9 +849,10 @@
         function closeLightbox() {
             document.getElementById('img-lightbox').classList.remove('open');
         }
-        document.getElementById('img-lightbox').addEventListener('click', function(e) {
+        document.getElementById('img-lightbox').addEventListener('click', function (e) {
             if (e.target === this) closeLightbox();
         });
     </script>
 </body>
+
 </html>
