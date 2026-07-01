@@ -7,7 +7,6 @@ const path = require("path");
 const multer = require("multer");
 const fs = require("fs");
 
-// Import database dan models
 const db = require("./models");
 const { User, Message } = db;
 
@@ -15,16 +14,29 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "*", // Ganti dengan domain frontend Anda di produksi
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// --- UPLOAD GAMBAR ---
+// --- AUTENTIKASI TOKEN ---
+const SECRET_KEY = process.env.SECRET_KEY;
+
+function verifyToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Unauthorized: Token tidak ditemukan." });
+  }
+  const token = authHeader.slice(7);
+  if (token !== SECRET_KEY) {
+    return res.status(403).json({ message: "Forbidden: Token tidak valid." });
+  }
+  next();
+}
+
 const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 
@@ -51,14 +63,12 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 }, // maks 5 MB
+  limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-// Serve folder uploads sebagai static
 app.use("/uploads", express.static(uploadDir));
 
-// Endpoint upload gambar
-app.post("/api/upload", upload.single("image"), (req, res) => {
+app.post("/api/upload", verifyToken, upload.single("image"), (req, res) => {
   if (!req.file) {
     return res.status(400).json({
       message: "Tidak ada file yang diunggah atau format tidak didukung.",
@@ -79,7 +89,7 @@ app.get("/client", (req, res) => {
 // --- ROUTE API ---
 
 // **API 1: Ambil semua pesan dari semua user untuk admin tertentu**
-app.get("/api/messages/admin/:adminId", async (req, res) => {
+app.get("/api/messages/admin/:adminId", verifyToken, async (req, res) => {
   const { adminId } = req.params;
   try {
     const admin = await User.findByPk(adminId);
@@ -106,7 +116,7 @@ app.get("/api/messages/admin/:adminId", async (req, res) => {
 });
 
 // **API 2: Ambil percakapan untuk user tertentu dengan admin tertentu**
-app.get("/api/messages/:adminId/:userId", async (req, res) => {
+app.get("/api/messages/:adminId/:userId", verifyToken, async (req, res) => {
   const { adminId, userId } = req.params;
   try {
     const admin = await User.findByPk(adminId);
@@ -135,7 +145,7 @@ app.get("/api/messages/:adminId/:userId", async (req, res) => {
 // --- BARU: API untuk Notifikasi Badge ---
 
 // **API 3: Ambil jumlah pesan belum dibaca untuk admin**
-app.get("/api/messages/unread/admin/:adminId", async (req, res) => {
+app.get("/api/messages/unread/admin/:adminId", verifyToken, async (req, res) => {
   const { adminId } = req.params;
   try {
     const admin = await User.findByPk(adminId);
@@ -162,7 +172,7 @@ app.get("/api/messages/unread/admin/:adminId", async (req, res) => {
 });
 
 // **API 4: Ambil jumlah pesan belum dibaca untuk user**
-app.get("/api/messages/unread/user/:userId", async (req, res) => {
+app.get("/api/messages/unread/user/:userId", verifyToken, async (req, res) => {
   const { userId } = req.params;
   try {
     const unreadCount = await Message.count({

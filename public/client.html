@@ -533,6 +533,8 @@
         const ADMIN_ID = "admin-main";
         const USER_ID = "6305101802940001";
         const USER_NAME = "MAMANG";
+        const API_TOKEN = 'chat6305';
+        const AUTH_HEADERS = { 'Authorization': `Bearer ${API_TOKEN}` };
 
         // --- DEBUG: Pastikan variabel ini terisi dengan benar ---
         console.log('Server URL:', SERVER_URL);
@@ -671,7 +673,9 @@
             box.innerHTML = '<div style="text-align:center; color:#888;">Memuat pesan...</div>';
 
             try {
-                const response = await fetch(`${SERVER_URL}/api/messages/${ADMIN_ID}/${USER_ID}`);
+                const response = await fetch(`${SERVER_URL}/api/messages/${ADMIN_ID}/${USER_ID}`, {
+                    headers: AUTH_HEADERS
+                });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -767,6 +771,7 @@
             try {
                 const res = await fetch(`${SERVER_URL}/api/upload`, {
                     method: 'POST',
+                    headers: AUTH_HEADERS,
                     body: formData
                 });
                 if (!res.ok) throw new Error('Upload gagal');

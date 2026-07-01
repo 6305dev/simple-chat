@@ -574,6 +574,8 @@
         // --- KONFIGURASI ---
         const SERVER_URL = "http://localhost:3000";
         const ADMIN_ID = 'admin-main';
+        const API_TOKEN = 'chat6305';
+        const AUTH_HEADERS = { 'Authorization': `Bearer ${API_TOKEN}` };
 
         // --- INISIALISASI SOCKET.IO ---
         const socket = io(SERVER_URL);
@@ -703,7 +705,9 @@
 
         async function loadAllConversations() {
             try {
-                const response = await fetch(`${SERVER_URL}/api/messages/admin/${ADMIN_ID}`);
+                const response = await fetch(`${SERVER_URL}/api/messages/admin/${ADMIN_ID}`, {
+                    headers: AUTH_HEADERS
+                });
                 allConversations = await response.json();
 
                 // Terapkan filter yang sedang aktif (jika ada)
@@ -735,7 +739,9 @@
             messagesDiv.innerHTML = '';
 
             try {
-                const response = await fetch(`${SERVER_URL}/api/messages/${ADMIN_ID}/${userId}`);
+                const response = await fetch(`${SERVER_URL}/api/messages/${ADMIN_ID}/${userId}`, {
+                    headers: AUTH_HEADERS
+                });
                 const messages = await response.json();
 
                 messages.forEach(msg => {
@@ -824,6 +830,7 @@
             try {
                 const res = await fetch(`${SERVER_URL}/api/upload`, {
                     method: 'POST',
+                    headers: AUTH_HEADERS,
                     body: formData
                 });
                 if (!res.ok) throw new Error('Upload gagal');
