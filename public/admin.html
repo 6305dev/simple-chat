@@ -504,9 +504,10 @@
         <div id="user-list-container">
             <div class="sidebar-search">
                 <div class="search-input-wrapper">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"/>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
                     </svg>
                     <input type="text" id="search-user-input" placeholder="Cari nama atau ID..." autocomplete="off">
                 </div>
@@ -576,6 +577,17 @@
         const ADMIN_ID = 'admin-main';
         const API_TOKEN = 'chat6305';
         const AUTH_HEADERS = { 'Authorization': `Bearer ${API_TOKEN}` };
+        // Path gambar dari sisi client (via Apache proxy)
+        // Apache: ProxyPass /imgs/ http://localhost:3000/uploads/
+        // Server menyimpan imageUrl sebagai /uploads/xxx.jpg
+        // resolveImageUrl() akan ganti /uploads/ → /imgs/ saat render di browser
+        const IMAGE_PROXY_PATH = "/imgs";
+        const IMAGE_SERVER_PATH = "/uploads";
+
+        function resolveImageUrl(imageUrl) {
+            if (!imageUrl) return imageUrl;
+            return imageUrl.replace(IMAGE_SERVER_PATH, IMAGE_PROXY_PATH);
+        }
 
         // --- INISIALISASI SOCKET.IO ---
         const socket = io(SERVER_URL);
@@ -617,10 +629,11 @@
             if (imageUrl) {
                 const img = document.createElement('img');
                 img.className = 'chat-img';
-                img.src = SERVER_URL + imageUrl;
+                const imgSrc = resolveImageUrl(imageUrl);
+                img.src = imgSrc;
                 img.alt = 'Gambar';
                 img.loading = 'lazy';
-                img.onclick = () => openLightbox(SERVER_URL + imageUrl);
+                img.onclick = () => openLightbox(imgSrc);
                 messageElement.appendChild(img);
             } else {
                 const textSpan = document.createElement('span');
